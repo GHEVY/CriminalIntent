@@ -8,6 +8,7 @@ material = "1.12.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 supportV4 = "28.0.0"
+recyclerviewV7 = "28.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -18,6 +19,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 support-v4 = { group = "com.android.support", name = "support-v4", version.ref = "supportV4" }
+recyclerview-v7 = { group = "com.android.support", name = "recyclerview-v7", version.ref = "recyclerviewV7" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

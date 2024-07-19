@@ -1,6 +1,5 @@
 package com.example.criminalintent;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,12 +13,10 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
-import java.text.SimpleDateFormat;
-
+import java.util.Date;
 
 public class CrimeFragment extends Fragment {
     private Crime Crime;
-    private EditText TitleField;
     public Button DateButton;
     private CheckBox SolvedCheckBox;
 
@@ -27,22 +24,21 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
-        TitleField =v.findViewById(R.id.crime_title);
+        EditText titleField = v.findViewById(R.id.crime_title);
         DateButton = v.findViewById(R.id.crime_date);
-        DateButton.setText(Crime.getDate().toString());
+        DateButton.setText(new Date().toString());
         DateButton.setEnabled(false);
-        SolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved);
+        CheckBox SolvedCheckBox = v.findViewById(R.id.crime_solved);
         SolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Crime.setSolved(isChecked);
             }
         });
-        TitleField.addTextChangedListener(new TextWatcher() {
+        titleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
                     CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -56,7 +52,6 @@ public class CrimeFragment extends Fragment {
 
             }
         });
-
         return v;
     }
 }
