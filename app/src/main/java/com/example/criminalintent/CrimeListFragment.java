@@ -1,5 +1,7 @@
 package com.example.criminalintent;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,8 +36,13 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView.setAdapter(Adapter);
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 
-    private static class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
         private TextView mTitleTextView;
         private TextView mDateTextView;
         private CheckBox mSolvedCheckBox;
@@ -62,7 +69,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
+            startActivity(intent);
         }
     }
 
@@ -93,6 +101,21 @@ public class CrimeListFragment extends Fragment {
             return mCrimes.size();
         }
     }
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateUI() {
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
+        List<Crime> crimes = crimeLab.getCrimes();
+        if (Adapter == null) {
+            Adapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(Adapter);
+        } else {
+            Adapter.notifyDataSetChanged();
+        }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mCrimeRecyclerView.setLayoutManager(layoutManager);
+    }
+
+
 }
 
 
