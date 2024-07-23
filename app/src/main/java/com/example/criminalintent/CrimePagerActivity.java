@@ -3,8 +3,10 @@ package com.example.criminalintent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -14,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.List;
 import java.util.UUID;
 
-public class CrimePagerActivity extends FragmentActivity {
+public class CrimePagerActivity extends AppCompatActivity {
     private List<Crime> mCrimes;
     private ViewPager ViewPager;
     private static final String EXTRA_CRIME_ID =
@@ -35,8 +37,8 @@ public class CrimePagerActivity extends FragmentActivity {
         mCrimes = CrimeLab.get(this).getCrimes();
         FragmentManager fragmentManager = getSupportFragmentManager();
         ViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
+
             @NonNull
-            @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
                 return CrimeFragment.newInstance(crime.getId());
@@ -46,7 +48,6 @@ public class CrimePagerActivity extends FragmentActivity {
             public int getCount() {
                 return mCrimes.size();
             }
-
         });
         for (int i = 0; i < mCrimes.size(); i++) {
             if (mCrimes.get(i).getId().equals(crimeId)) {

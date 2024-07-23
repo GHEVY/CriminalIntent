@@ -15,9 +15,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -25,17 +28,39 @@ public class CrimeFragment extends Fragment {
     public Button DateButton;
     private CheckBox SolvedCheckBox;
     private static final String ARG_CRIME_ID = "crime_id";
-    private static final String DIALOG_DATE = "DialogDate";
+    public int count =0;
+
+
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
         EditText titleField = v.findViewById(R.id.crime_title);
         DateButton = v.findViewById(R.id.crime_date);
-        DateButton.setText(new Date().toString());
         DateButton.setOnClickListener(v1 -> {
-            FragmentManager manager = getFragmentManager();
-            DatePickerFragment dialog = new DatePickerFragment();
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getContext(),
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                            LocalDate newdate = LocalDate.of( year, month+1,dayOfMonth);
+                            Date date = Date.from(newdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                            Crime.setDate(date);
+                            updateDate();
+
+
+                        }
+                    },
+                    year, month, dayOfMonth);
+
+            datePickerDialog.show();
+
         });
         assert getArguments() != null;
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
@@ -75,4 +100,13 @@ public class CrimeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    private void updateDate() {
+        if(Crime.getDate() != null){
+            DateButton.setText(Crime.getDate().toString());
+            count++;
+        }
+    }
+
+
 }
