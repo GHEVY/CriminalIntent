@@ -17,10 +17,9 @@ import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -28,15 +27,13 @@ public class CrimeFragment extends Fragment {
     public Button DateButton;
     private CheckBox SolvedCheckBox;
     private static final String ARG_CRIME_ID = "crime_id";
-    public int count =0;
-
-
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
         EditText titleField = v.findViewById(R.id.crime_title);
         DateButton = v.findViewById(R.id.crime_date);
+        DateButton.setText(R.string.date_button);
         DateButton.setOnClickListener(v1 -> {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -48,13 +45,10 @@ public class CrimeFragment extends Fragment {
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-                            LocalDate newdate = LocalDate.of( year, month+1,dayOfMonth);
+                            LocalDate newdate = LocalDate.of(year, month + 1, dayOfMonth);
                             Date date = Date.from(newdate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                             Crime.setDate(date);
                             updateDate();
-
-
                         }
                     },
                     year, month, dayOfMonth);
@@ -102,11 +96,19 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateDate() {
-        if(Crime.getDate() != null){
+        if (Crime.getDate() != null) {
             DateButton.setText(Crime.getDate().toString());
-            count++;
+
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        CrimeLab.get(getActivity())
+                .updateCrime(Crime);
+
+
+    }
 }
