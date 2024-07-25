@@ -151,7 +151,6 @@ public class CrimeListFragment extends Fragment {
         }
 
 
-        @SuppressLint("NotifyDataSetChanged")
         public void setCrimes(List<Crime> crimes) {
             mCrimes = crimes;
         }
